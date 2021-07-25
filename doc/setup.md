@@ -1,7 +1,7 @@
 #Sensoriando
 **Setup**
 
-## Django
+## .NetCore
 ```console
 
 ```
