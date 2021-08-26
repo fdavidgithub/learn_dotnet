@@ -10,6 +10,9 @@
 
 2. dotNet Core init
 ```console
+export DOTNET_ROOT=/opt/dotnet
+dotnet new webapi
+dotnet tool install --global dotnet-ef
 ```
 
 3. dotNet runtime
