@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace sensoriando_webservice.Models
+namespace sensoriando_webservice.LegacyModels
 {
-    public partial class Thingsparam
+    public partial class Accountsthing
     {
         public int Id { get; set; }
         public DateTime Dt { get; set; }
-        public string Key { get; set; }
-        public string Value { get; set; }
+        public int IdAccount { get; set; }
         public int IdThing { get; set; }
 
+        public virtual Account IdAccountNavigation { get; set; }
         public virtual Thing IdThingNavigation { get; set; }
     }
 }

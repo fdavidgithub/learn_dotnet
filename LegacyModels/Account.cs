@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace sensoriando_webservice.Models
+namespace sensoriando_webservice.LegacyModels
 {
     public partial class Account
     {

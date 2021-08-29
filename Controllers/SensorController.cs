@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using sensoriando_webservice.Models;
+using sensoriando_webservice.LegacyModels;
 
 namespace sensoriando_webservice.Controllers
 {

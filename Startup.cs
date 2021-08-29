@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using sensoriando_webservice.Models;
+using sensoriando_webservice.LegacyModels;
 
 namespace sensoriando_webservice
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace sensoriando_webservice.Models
+namespace sensoriando_webservice.LegacyModels
 {
     public partial class sensoriandoContext : DbContext
     {
