@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using sensoriando_webservice.Models;
 
 namespace sensoriando_webservice
 {
@@ -31,6 +33,10 @@ namespace sensoriando_webservice
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "sensoriando_webservice", Version = "v1" });
+            });
+            services.AddDbContext<sensoriandoContext>( option =>
+            {
+                option.UseNpgsql("Name=ConnectionStrings:DevAlias");     
             });
         }
 
