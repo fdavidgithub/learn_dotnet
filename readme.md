@@ -21,7 +21,10 @@ dotnet run
 ```
 
 4. Browser URL
-localhost:8000
+localhost:5000
+
+5. Swagger on Firefox
+https://addons.mozilla.org/en-US/firefox/addon/access-control-allow-origin/
 
 
 
