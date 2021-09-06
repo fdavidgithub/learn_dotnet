@@ -1,0 +1,203 @@
+@page
+@{
+    var auth = false;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>titulo</title>
+        
+        <meta name="description" content="Sensoriando: Sensores públicos. Sensoriando é um hug MQTT de sensores.">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <!-- Bootstrap CSS: BEGIN -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" media="screen" />
+        <!-- Bootstrap CSS: END -->
+
+        <!-- Chart.js: BEGIN -->
+	    <script src="https://www.chartjs.org/dist/2.9.3/Chart.min.js"></script>
+	    <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+        <!-- Chats.js: END -->
+
+        <!-- Bootstrap JS: BEGIN -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <!-- Bootstrap JS: END -->
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/www">Sensoriando</a>
+                </div>
+
+                @if (auth)
+                {
+                    <ul class="nav navbar-nav">
+                        <li class="active dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-channels-after">Sensores<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="nav-my-channels" href="/home/private">Meus Sensores</a></li>
+                            <li><a id="nav-public-channels" href="/home">Sensores Públicos</a></li>
+                        </ul>
+                        </li>
+
+                        <li><a href="/map">Mapa</a></li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Sensores</a></li>
+                        <li><a href="/map">Mapa</a></li>
+                    </ul>
+                }
+    
+                <ul class="nav navbar-nav navbar-right">
+
+                @if (auth)
+                {
+                    <li><a href="/account/{{ user.username }}/profile"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
+                }
+                else
+                {
+                    <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Cadastrar</a></li>
+                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Entrar</a></li>
+                }
+
+                </ul>
+            </div>
+        </nav> 
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-9">
+
+                @if (auth)
+                { 
+                    <h1>Meus Sensores</h1>
+                }
+                else
+                {
+                    <h1>Sensores Públicos {{ contexts.filterapply }}</h1>
+                }
+
+                <!-- Sensors list: BEGIN class="link-no-hover"-->
+                    <div class="col-md-5 col-sm-6 col-xs-12" data-turbolink="false">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading ellipsis">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <a class="bg-info text-info" href="/thing/{{ context.nameslug }}"><b>{{ context.name }}</b></a>
+                            </div>
+                            
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"><b>Cidade</b></div>
+                                    <div class="col-sm-6 col-xs-6">
+                                        <a href="/home/search/city={{ context.cityslug }}">{{ context.city }}</a>
+                                        <a href="/home/search/state={{ context.state }}">{{ context.state }}</a>
+                                    </div>
+                                </div>
+                            
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"><b>País</b></div>
+                                    <div class="col-sm-6 col-xs-6"><a href="/home/search/country={{ context.country }}">{{ context.country }}</a></div>
+                                </div> 
+                    
+                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                            
+                                <div class="public_channel_tags">
+                                    <i class="fa fa-dashboard"></i>
+
+                                    {% for sensor in context.sensors %}
+                                        <a href="/home/search/sensor={{ sensor.name }}">{{ sensor.name }}</a>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-6"><b>Última leitura</b></div>
+                                    <div class="col-sm-6 col-xs-6">{{ context.last_update }}</div>
+                                </div> 
+                    
+                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                        
+                                <div class="public_channel_tags">
+                                    <i class="fa fa-tags"></i>
+                                    
+                                    {% for flag in context.tags %}
+                                        <a href="/home/search/flag={{ flag.name }}">{{ flag.name }}</a>     
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- Sensors list: END -->
+            </div>
+
+            @if (auth) 
+            {
+                <div class="col-xs-12 col-sm-3">
+
+                    <h1>Indicadores</h1>
+
+                    <div class="col-pad">
+
+                        <div class="form-group">
+                            <label>Total de Registros: </label> {{ contexts.records }} {{ contexts.rec_unit }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tempo de retencao: </label> {{ contexts.retation_current }} de {{ contexts.retation_full }} {{ contexts.ret_unit }}
+                        </div>
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-sm-3">
+
+                <h1>Filtros</h1>
+
+                <div class="col-pad">
+
+                    <div class="form-group">
+                        <label for="tag_input"><i class="fa fa-dashboard"></i>&nbsp;</label>
+            
+                        <select name="SearchSensor" id="SearchSensor">
+                            <option value="" selected>Todos sensores</option>
+                            {% for searchsensor in contexts.searchsensors %}
+                            <option value={{ searchsensor.name }}>{{ searchsensor.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tag_input"><i class="fa fa-tags"></i>&nbsp;</label>
+            
+                        <select name="SearchTag" id="SearchTag">
+                            <option value="" selected>Todas tags</option>
+                            {% for searchflag in contexts.searchtags %}
+                            <option value={{ searchflag.name }}>{{ searchflag.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="button" id="search" onclick="javascript:setFilter('SearchSensor', 'SearchTag');" class="btn btn-primary btn-sm">Aplicar</button>
+                    <button type="reset" id="clear" onclick="window.location.href='/home'" class="btn btn-primary btn-sm">Limpar</button>
+
+                </div>
+            </div>
+            }
+
+        </div>
+    </body>
+</html>
+

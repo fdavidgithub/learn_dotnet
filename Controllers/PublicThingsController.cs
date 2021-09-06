@@ -17,7 +17,7 @@ namespace sensoriando_webservice.Controllers
         public PublicThingsController(sensoriandoContext context)
         {
             _context = context;
-        }
+        }   
 
         [HttpGet]
         public IQueryable Get()
