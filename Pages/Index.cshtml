@@ -1,93 +1,43 @@
 @page
 @{
     var auth = false;
+    string[] sensores = { "a", "b", "c", "d"};
+
 }
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>titulo</title>
-        
-        <meta name="description" content="Sensoriando: Sensores públicos. Sensoriando é um hug MQTT de sensores.">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-        <!-- Bootstrap CSS: BEGIN -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" media="screen" />
-        <!-- Bootstrap CSS: END -->
-
-        <!-- Chart.js: BEGIN -->
-	    <script src="https://www.chartjs.org/dist/2.9.3/Chart.min.js"></script>
-	    <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
-        <!-- Chats.js: END -->
-
-        <!-- Bootstrap JS: BEGIN -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <!-- Bootstrap JS: END -->
-    </head>
-
-    <body>
-        <nav class="navbar navbar-inverse">
+@section Menucontent
+{
+       <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/www">Sensoriando</a>
                 </div>
 
-                @if (auth)
-                {
-                    <ul class="nav navbar-nav">
-                        <li class="active dropdown">
+                <ul class="nav navbar-nav">
+                    <li class="active dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-channels-after">Sensores<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a id="nav-my-channels" href="/home/private">Meus Sensores</a></li>
                             <li><a id="nav-public-channels" href="/home">Sensores Públicos</a></li>
                         </ul>
-                        </li>
+                    </li>
 
-                        <li><a href="/map">Mapa</a></li>
-                    </ul>
-                }
-                else
-                {
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Sensores</a></li>
-                        <li><a href="/map">Mapa</a></li>
-                    </ul>
-                }
+                    <li><a href="/map">Mapa</a></li>
+                </ul>
     
                 <ul class="nav navbar-nav navbar-right">
-
-                @if (auth)
-                {
-                    <li><a href="/account/{{ user.username }}/profile"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
-                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
-                }
-                else
-                {
-                    <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Cadastrar</a></li>
-                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Entrar</a></li>
-                }
-
+                    <li><a href="/signup"><span class="glyphicon glyphicon-user"></span>Cadastrar</a></li>
+                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Entrar</a></li>
                 </ul>
             </div>
-        </nav> 
+        </nav>
+}
 
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-9">
 
-                @if (auth)
-                { 
-                    <h1>Meus Sensores</h1>
-                }
-                else
-                {
-                    <h1>Sensores Públicos {{ contexts.filterapply }}</h1>
-                }
+                <h1>Sensores Públicos {{ contexts.filterapply }}</h1>
 
                 <!-- Sensors list: BEGIN class="link-no-hover"-->
                     <div class="col-md-5 col-sm-6 col-xs-12" data-turbolink="false">
@@ -141,28 +91,13 @@
                 <!-- Sensors list: END -->
             </div>
 
-            @if (auth) 
-            {
-                <div class="col-xs-12 col-sm-3">
-
-                    <h1>Indicadores</h1>
-
-                    <div class="col-pad">
-
-                        <div class="form-group">
-                            <label>Total de Registros: </label> {{ contexts.records }} {{ contexts.rec_unit }}
-                        </div>
-
-                        <div class="form-group">
-                            <label>Tempo de retencao: </label> {{ contexts.retation_current }} de {{ contexts.retation_full }} {{ contexts.ret_unit }}
-                        </div>
-
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="col-xs-12 col-sm-3">
+@if ( @auth )
+{
+    <div>any thing auth</div> 
+}
+else
+{
+<div class="col-xs-12 col-sm-3">
 
                 <h1>Filtros</h1>
 
@@ -176,6 +111,14 @@
                             {% for searchsensor in contexts.searchsensors %}
                             <option value={{ searchsensor.name }}>{{ searchsensor.name }}</option>
                             {% endfor %}
+
+
+  @foreach (var sensor in sensores)
+  {          
+      <option value=@sensor>@sensor</option>
+  }
+
+
                         </select>
                     </div>
 
@@ -194,10 +137,5 @@
                     <button type="reset" id="clear" onclick="window.location.href='/home'" class="btn btn-primary btn-sm">Limpar</button>
 
                 </div>
-            </div>
-            }
-
-        </div>
-    </body>
-</html>
-
+</div>
+}
