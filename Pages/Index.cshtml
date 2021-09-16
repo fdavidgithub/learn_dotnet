@@ -1,8 +1,6 @@
 @page
+@model IndexModel
 @{
-    var auth = false;
-    string[] sensores = { "a", "b", "c", "d"};
-
 }
 
 @section Menucontent
@@ -91,7 +89,7 @@
                 <!-- Sensors list: END -->
             </div>
 
-@if ( @auth )
+@if ( Model.Auth )
 {
     <div>any thing auth</div> 
 }
@@ -113,11 +111,10 @@ else
                             {% endfor %}
 
 
-  @foreach (var sensor in sensores)
+  @foreach (var sensor in Model.Sensores)
   {          
       <option value=@sensor>@sensor</option>
   }
-
 
                         </select>
                     </div>
