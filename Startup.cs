@@ -30,14 +30,17 @@ namespace sensoriando_webservice
         {
 
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "sensoriando_webservice", Version = "v1" });
             });
+
             services.AddDbContext<sensoriandoContext>( option =>
             {
                 option.UseNpgsql("Name=ConnectionStrings:DevAlias");     
             });
+            
             services.AddRazorPages();
         }
 
